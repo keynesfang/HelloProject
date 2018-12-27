@@ -8,7 +8,6 @@ var nav_menu = {
             };
         },
         template: ' <el-menu\
-                        default-active="2"\
                         class="el-menu-vertical-demo"\
                         background-color="#545c64"\
                         text-color="#fff"\
@@ -19,7 +18,7 @@ var nav_menu = {
                                 <i :class="menu_item.icon"></i>\
                                 <span>{{menu_item.name}}</span>\
                             </template>\
-                            <el-menu-item v-for="subitem in menu_item.subitems" :index="subitem.id" :key="subitem.id" @click="$emit(\'menu-click\', subitem.id)">\
+                            <el-menu-item v-for="subitem in menu_item.subitems" :index="subitem.id" :key="subitem.id" @click="$emit(\'menu-click\', subitem)">\
                                 <i class="el-icon-caret-right"></i> {{subitem.name}}\
                             </el-menu-item>\
                         </el-submenu>\

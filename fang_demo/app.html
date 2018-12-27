@@ -3,60 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>demo</title>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="./libs/vue.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="./app.css">
-    <!-- 引入组件库 -->
+    <link rel="stylesheet" href="./css/app.css">
+    <!-- 引入Element UI组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./libs/jquery.min.js"></script>
+    <script src="./compotents/nav_menu.js"></script>
+    <script src="app.js"></script>
+    <script type="text/javascript">
+    // Vue.component(nav_menu.component_name, nav_menu.component_attr);
+    tabs_items = [
+        {
+            name: 'index',
+            title: '主页',
+            icon: 'el-icon-star-on',
+            content: 'http://www.baidu.com',
+            closable: false
+        }
+    ]
+    var default_selected_tab_name = "index";
+    $(function() {
+        var app = app_init();
+        $(window).resize(function() {
+            app.aside_height = document.documentElement.clientHeight;
+        });
+    });
+</script>
 </head>
 <body>
-
 <div id="app">
     <el-container>
         <el-header><i class="el-icon-menu" @click="shoe_hide_menu"></i> Header</el-header>
-        <el-container>
-            <el-aside :width="aside_width">
+        <el-container >
+            <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px'}">
                 <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
             </el-aside>
             <el-main>
-                <c-nav-tabs @tab-click="selectTab" @remove-tab="removeTab" :select_tab_name="select_tab_name"></c-nav-tabs>
+                <el-tabs v-model="selected_tab_name" type="border-card" @tab-remove="removeTab" :style="{height: aside_height-65 + 'px'}">
+                    <el-tab-pane
+                        v-for="(tab, index) in tabs_items"
+                        :key="tab.name"
+                        :label="tab.title"
+                        :closable="tab.closable"
+                        :name="tab.name">
+                        <span slot="label"><i :class="tab.icon"></i> {{tab.title}}</span>
+                        <!-- <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe> -->
+                    </el-tab-pane>
+                </el-tabs>
             </el-main>
         </el-container>
     </el-container>
 </div>
-
-<script src="./compotents/nav_menu.js"></script>
-<script src="./compotents/nav_tabs.js"></script>
-<script type="text/javascript">
-    // Vue.component(nav_menu.component_name, nav_menu.component_attr);
-    var app = new Vue({
-        el: "#app",
-        components: {
-          "c-nav-menu": nav_menu.component_attr,
-          "c-nav-tabs": nav_tabs.component_attr
-        },
-        data: {
-            aside_width: "200px",
-            menu_display: false,
-            select_tab_name: "index"
-        },
-        methods: {
-            shoe_hide_menu: function () {
-                this.aside_width = "65px";
-                this.menu_display = !this.menu_display;
-            },
-            addTab: function(tabName) {
-                nav_tabs.addTab(tabName);
-                this.select_tab_name = tabName;
-            },
-            removeTab: function(tabInfo) {
-                if(tabInfo.closeTabName == this.select_tab_name) {
-                    this.select_tab_name = tabInfo.nextOpnTabName;
-                }
-            }
-        }
-    });
-</script>
 </body>
 </html>

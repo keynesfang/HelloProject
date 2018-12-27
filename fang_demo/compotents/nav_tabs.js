@@ -2,9 +2,9 @@ var nav_tabs = {
     component_name: "c-nav-tabs",
     opend_tab_list: [],
     component_attr: {
-        props: ["select_tab_name"],
         data: function() {
             return {
+                select_tab_name: "index",
                 tabs_items: nav_tabs.component_data
             };
         },
@@ -31,6 +31,14 @@ var nav_tabs = {
                     nextOpnTabName: "index"
                 }
                 this.$emit("remove-tab", tabInfo);
+            },
+            get_select_tab_name: function() {
+                return this.select_tab_name;
+            },
+            set_select_tab_name: function(select_tab_name) {
+                
+                alert(select_tab_name);
+                this.select_tab_name = select_tab_name;
             }
         }
     },
