@@ -6,50 +6,9 @@
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./app.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .el-header, .el-footer {
-            background-color: #545c64;
-            color: #fff;
-            text-align: left;
-            line-height: 60px;
-            font-size: 25px;
-        }
-
-        .el-aside {
-            background-color: #545c64;
-            color: #333;
-            line-height: 200px;
-        }
-
-        .el-menu {
-            border: 0;
-        }
-
-        .el-main {
-            padding: 0 2px 0 0;
-            background-color: #545c64;
-        }
-
-        body > .el-container {
-            margin-bottom: 40px;
-        }
-
-        .el-container:nth-child(5) .el-aside,
-        .el-container:nth-child(6) .el-aside {
-            line-height: 260px;
-        }
-
-        .el-container:nth-child(7) .el-aside {
-            line-height: 320px;
-        }
-    </style>
 </head>
 <body>
 
@@ -57,87 +16,44 @@
     <el-container>
         <el-header><i class="el-icon-menu" @click="shoe_hide_menu"></i> Header</el-header>
         <el-container>
-            <el-aside :width="menu_width">
-                <el-menu
-                        default-active="2"
-                        class="el-menu-vertical-demo"
-                        background-color="#545c64"
-                        text-color="#fff"
-                        :collapse="isCollapse"
-                        active-text-color="#ffd04b">
-                    <nav-menu v-for="menu_item in menu_items" :menu_attr="menu_item" :key="menu_item.id"></nav-menu>
-                </el-menu>
+            <el-aside :width="aside_width">
+                <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
             </el-aside>
             <el-main>
-                <el-tabs v-model="select_meanu_name" type="border-card" @tab-remove="removeTab">
-                    <el-tab-pane
-                        v-for="(tab, index) in tabs_items"
-                        :key="tab.name"
-                        :label="tab.title"
-                        :closable="tab.closable"
-                        :name="tab.name">
-                        <span slot="label"><i :class="tab.icon"></i> {{tab.title}}</span>
-                        <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe>
-                    </el-tab-pane>
-                </el-tabs>
+                <c-nav-tabs @tab-click="selectTab" @remove-tab="removeTab" :select_tab_name="select_tab_name"></c-nav-tabs>
             </el-main>
         </el-container>
     </el-container>
 </div>
 
-<script src="./templates/nav_menu.js"></script>
+<script src="./compotents/nav_menu.js"></script>
+<script src="./compotents/nav_tabs.js"></script>
 <script type="text/javascript">
-    Vue.component(nav_menu.component_name, nav_menu.component_attr);
-
-    var top_tabs = {
-        select_meanu_name: "index",
-        component_data: [
-            {
-                name: 'index',
-                title: '主页',
-                icon: 'el-icon-star-on',
-                content: 'http://www.baidu.com',
-                closable: false
-            },
-            {
-                name: 'meanu-a',
-                title: 'Tab 1',
-                icon: 'el-icon-tickets',
-                content: 'http://element-cn.eleme.io',
-                closable: true
-            }
-        ]
-    };
-
-    var index = new Vue({
+    // Vue.component(nav_menu.component_name, nav_menu.component_attr);
+    var app = new Vue({
         el: "#app",
+        components: {
+          "c-nav-menu": nav_menu.component_attr,
+          "c-nav-tabs": nav_tabs.component_attr
+        },
         data: {
-            isCollapse: false,
-            menu_width: "200px",
-            menu_items: nav_menu.component_data,
-            select_meanu_name: top_tabs.select_meanu_name,
-            tabs_items: top_tabs.component_data
+            aside_width: "200px",
+            menu_display: false,
+            select_tab_name: "index"
         },
         methods: {
             shoe_hide_menu: function () {
-                this.menu_width = "200px";
-                this.isCollapse = !this.isCollapse;
+                this.aside_width = "65px";
+                this.menu_display = !this.menu_display;
             },
-            removeTab:function(targetName) {
-                let tabs = this.tabs_items;
-                if (this.select_meanu_name === targetName) {
-                  tabs.forEach((tab, index) => {
-                    if (tab.name === targetName) {
-                      let nextTab = tabs[index + 1] || tabs[index - 1];
-                      if (nextTab) {
-                        this.select_meanu_name = nextTab.name;
-                      }
-                    }
-                  });
+            addTab: function(tabName) {
+                nav_tabs.addTab(tabName);
+                this.select_tab_name = tabName;
+            },
+            removeTab: function(tabInfo) {
+                if(tabInfo.closeTabName == this.select_tab_name) {
+                    this.select_tab_name = tabInfo.nextOpnTabName;
                 }
-                
-                this.editableTabsValue2 = this.select_meanu_name;
-                this.tabs_items = tabs.filter(tab => tab.name !== targetName);
             }
         }
     });
