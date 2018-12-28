@@ -3,13 +3,13 @@ package mapper;
 import domain.User;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(int id);
 
     int insert(User record);
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(Integer id);
+    User selectByPrimaryKey(int id);
 
     int updateByPrimaryKeySelective(User record);
 
