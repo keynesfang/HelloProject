@@ -25,8 +25,7 @@ var nav_menu = {
                     </el-menu>\
                 '
     },
-    component_data: 
-    [
+    component_data: [
         {
             id: "meanu-a",
             name: '操作菜单a',
@@ -45,12 +44,21 @@ var nav_menu = {
                 {id: "meanu-b-2", name: "子菜单4", url: ""}
             ]
         }
-    ]
+    ],
+    data_transform: function(db_format)  {
+        var app_format = [];
+        for(let i=0; i<db_format.length; i++) {
+            let obj = db_format[i];
+            if(app_format[obj.parent_id]) {
+                
+            }
+        }
+    }
 };
 
 var data_from_db = [
-    {id: "meanu-a-1", name: "子菜单1", url: "", parent_id: "meanu-a", parent_name"操作菜单a"},
-    {id: "meanu-a-2", name: "子菜单2", url: "", parent_id: "meanu-a", parent_name"操作菜单a"},
-    {id: "meanu-b-1", name: "子菜单3", url: "", parent_id: "meanu-b", parent_name"操作菜单b"},
-    {id: "meanu-b-2", name: "子菜单4", url: "", parent_id: "meanu-b", parent_name"操作菜单b"}
+    {id: "meanu-a-1", name: "子菜单1", url: "", parent_id: "meanu-a", parent_name: "操作菜单a"},
+    {id: "meanu-a-2", name: "子菜单2", url: "", parent_id: "meanu-a", parent_name: "操作菜单a"},
+    {id: "meanu-b-1", name: "子菜单3", url: "", parent_id: "meanu-b", parent_name: "操作菜单b"},
+    {id: "meanu-b-2", name: "子菜单4", url: "", parent_id: "meanu-b", parent_name: "操作菜单b"}
 ];
