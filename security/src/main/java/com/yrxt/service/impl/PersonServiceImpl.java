@@ -22,7 +22,7 @@ public class PersonServiceImpl implements IPersonService {
         this.personMapper = personMapper;
     }
 
-    // @Override
+    @Override
     public List<Person> loadPersons() {
         return personMapper.queryAll();
     }
