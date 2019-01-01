@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>demo</title>
+    <title>security</title>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="/safety/libs/element_ui/index.ui.min.css">
     <link rel="stylesheet" href="/safety/module/app.css">
     <script src="/safety/libs/vue.js"></script>
     <script src="/safety/libs/element_ui/index.ui.min.js"></script>
-    <script src="/safety/libs/jquery.min.js"></script>
     <script src="/safety/compotents/nav_menu.js"></script>
     <script src="/safety/module/app.js"></script>
+    <script src="/safety/libs/jquery.min.js"></script>
     <script type="text/javascript">
     tabs_items = [
         {
@@ -33,7 +33,17 @@
 <body>
 <div id="app">
     <el-container>
-        <el-header><i class="el-icon-menu" @click="shoe_hide_menu"></i> Header</el-header>
+        <el-header>
+        	<i class="el-icon-menu" @click="shoe_hide_menu"></i> Header
+        	<div style="position: absolute; right: 10px; top: 10px;">
+                abc 
+                <el-switch
+                	@change="logout"
+                	v-model="login_status"
+	                active-text="注销">
+                </el-switch>
+            </div>
+        </el-header>
         <el-container >
             <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px'}">
                 <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>

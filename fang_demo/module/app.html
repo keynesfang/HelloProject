@@ -33,7 +33,16 @@
 <body>
 <div id="app">
     <el-container>
-        <el-header><i class="el-icon-menu" @click="shoe_hide_menu"></i> Header</el-header>
+        <el-header>
+            <i class="el-icon-menu" @click="shoe_hide_menu"></i> Header
+            <div style="position: absolute; right: 10px; top: 10px;">
+                abc 
+                <el-switch
+                  v-model="loginStatus"
+                  active-text="注销">
+                </el-switch>
+            </div>
+        </el-header>
         <el-container >
             <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px'}">
                 <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>

@@ -9,9 +9,13 @@ function app_init() {
             tabs_items: tabs_items,
             aside_height: document.documentElement.clientHeight,
             aside_width: "200px",
-            menu_display: false
+            menu_display: false,
+            login_status: true
         },
         methods: {
+        	logout: function () {
+        		document.location.href = "/safety/user/logout";
+        	},
             shoe_hide_menu: function () {
                 this.aside_width = this.menu_display ? "200px" : "65px";
                 this.menu_display = !this.menu_display;

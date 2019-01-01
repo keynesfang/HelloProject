@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.sf.json.JSONObject;
 
 @Controller
-public class appController {
-	@RequestMapping(value = "/app", method = RequestMethod.GET)
+public class AppController {
+	@RequestMapping(value = "/app")
 	public String App(HttpSession session) throws Exception {
+		System.out.println("app:" + session.getAttribute("username"));
 		if(session.getAttribute("username") == null) {
 			return "redirect:user/login";
 		}

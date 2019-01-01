@@ -8,6 +8,7 @@
 <script src="/safety/libs/vue.js"></script>
 <script src="/safety/libs/jquery.min.js"></script>
 <script src="/safety/libs/element_ui/index.ui.min.js"></script>
+<title>security</title>
 <style>
 .login-wrap {
 	position: relative;
@@ -81,7 +82,7 @@
 	</div>
 </body>
 <script>
-    new Vue({
+    var app = new Vue({
         el: '#app',
         data: function () {
             return {
@@ -117,7 +118,7 @@
 		                       if(rtlObj.result == "success") {
 		                    	   document.location.href = rtlObj.url;
 		                       } else {
-		                    	   alert("login err!");
+		                    	   app.loginError();
 		                       }
 		                    },
 		                    error : function(data) {
@@ -125,6 +126,12 @@
 		                    	$("body").html(data.responseText);
 		                    }
 		          })
+            },
+            loginError() {
+                this.$notify.error({
+                  title: '登陆失败',
+                  message: '用户名或密码错误！'
+                });
             }
         }
     })

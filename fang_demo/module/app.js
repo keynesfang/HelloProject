@@ -9,7 +9,8 @@ function app_init() {
             tabs_items: tabs_items,
             aside_height: document.documentElement.clientHeight,
             aside_width: "200px",
-            menu_display: false
+            menu_display: false,
+            loginStatus: true
         },
         methods: {
             shoe_hide_menu: function () {

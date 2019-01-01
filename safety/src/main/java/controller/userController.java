@@ -11,17 +11,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import domain.User;
 import net.sf.json.JSONObject;
-import service.userService;
+import service.UserService;
 
 @Controller
 @RequestMapping("/user")
-public class userController {
+public class UserController {
 	@Autowired
-	private userService userService;
+	private UserService userService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String Login() throws Exception {
 		return "login";
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String Logout(HttpSession session) throws Exception {
+		session.invalidate();
+		return "redirect:login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -36,7 +42,6 @@ public class userController {
 			session.setAttribute("username", username);
 			rltDataObj.accumulate("result", "success");
 			rltDataObj.accumulate("url", "/safety/app");
-			System.out.println(session.getAttribute("username").toString());
 		} else {
 			rltDataObj.accumulate("result", "fail");
 			System.out.println("login error!");

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import domain.User;
 import mapper.UserMapper;
 @Service
-public class userService {
+public class UserService {
 	@Autowired
 	private UserMapper usermapper;
 	
