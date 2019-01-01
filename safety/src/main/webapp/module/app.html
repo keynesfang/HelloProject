@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/safety/libs/element_ui/index.ui.min.css">
+    <link rel="stylesheet" href="/safety/module/app.css">
+    <script src="/safety/libs/vue.js"></script>
+    <script src="/safety/libs/element_ui/index.ui.min.js"></script>
+    <script src="/safety/libs/jquery.min.js"></script>
+    <script src="/safety/compotents/nav_menu.js"></script>
+    <script src="/safety/module/app.js"></script>
+    <script type="text/javascript">
+    tabs_items = [
+        {
+            name: 'index',
+            title: '主页',
+            icon: 'el-icon-star-on',
+            content: 'http://www.baidu.com',
+            closable: false
+        }
+    ]
+    var default_selected_tab_name = "index";
+    $(function() {
+        var app = app_init();
+        $(window).resize(function() {
+            app.aside_height = document.documentElement.clientHeight;
+        });
+    });
+</script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header><i class="el-icon-menu" @click="shoe_hide_menu"></i> Header</el-header>
+        <el-container >
+            <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px'}">
+                <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
+            </el-aside>
+            <el-main>
+                <el-tabs v-model="selected_tab_name" type="border-card" @tab-remove="removeTab" :style="{height: aside_height-65 + 'px'}">
+                    <el-tab-pane
+                        v-for="(tab, index) in tabs_items"
+                        :key="tab.name"
+                        :label="tab.title"
+                        :closable="tab.closable"
+                        :name="tab.name">
+                        <span slot="label"><i :class="tab.icon"></i> {{tab.title}}</span>
+                        <!-- <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe> -->
+                    </el-tab-pane>
+                </el-tabs>
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+</body>
+</html>
