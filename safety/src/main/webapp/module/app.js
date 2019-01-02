@@ -5,12 +5,14 @@ function app_init() {
           "c-nav-menu": nav_menu.component_attr
         },
         data: {
+        	loading: true,
             selected_tab_name: default_selected_tab_name,
             tabs_items: tabs_items,
             aside_height: document.documentElement.clientHeight,
             aside_width: "200px",
             menu_display: false,
-            login_status: true
+            login_status: true,
+            username: ""
         },
         methods: {
         	logout: function () {

@@ -13,12 +13,24 @@ import net.sf.json.JSONObject;
 
 @Controller
 public class AppController {
-	@RequestMapping(value = "/app")
+	@RequestMapping(value = "/app", method = RequestMethod.GET)
 	public String App(HttpSession session) throws Exception {
-		System.out.println("app:" + session.getAttribute("username"));
 		if(session.getAttribute("username") == null) {
 			return "redirect:user/login";
 		}
 		return "module/app";
+	}
+	
+	@RequestMapping(value = "/app", method = RequestMethod.POST)
+	@ResponseBody
+	public String AppData(HttpSession session) throws Exception {
+		JSONObject rltDataObj = new JSONObject();
+		if(session.getAttribute("username") == null) {
+			rltDataObj.accumulate("url", "/user/login");
+		} else {
+			rltDataObj.accumulate("username", session.getAttribute("username"));
+		}
+		Thread.sleep(2000);
+		return rltDataObj.toString();
 	}
 }
