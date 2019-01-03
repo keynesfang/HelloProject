@@ -74,4 +74,7 @@
       password = #{password,jdbcType=VARCHAR}
     where Id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getAllUserList" resultMap="BaseResultMap">
+    select * from user
+  </select>
 </mapper>

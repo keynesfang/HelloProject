@@ -1,5 +1,7 @@
 package service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +14,9 @@ public class UserService {
 	
 	public User login(User u) {
 		return usermapper.login(u);
+	}
+	
+	public List<User> getAllUserList() {
+		return usermapper.getAllUserList();
 	}
 }

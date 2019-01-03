@@ -1,6 +1,7 @@
 package mapper;
 
 import domain.User;
+import java.util.List;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +17,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
     
     User login(User user);
+    
+    List<User> getAllUserList();
 }
