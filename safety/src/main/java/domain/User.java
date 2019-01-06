@@ -4,33 +4,43 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("user")
 public class User {
-    private Integer id;
+    private Integer userid;
 
-    private String name;
+    private String username;
 
-    private String password;
+    private String userpass;
 
-    public Integer getId() {
-        return id;
+    private String userright;
+
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserpass() {
+        return userpass;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserpass(String userpass) {
+        this.userpass = userpass;
+    }
+
+    public String getUserright() {
+        return userright;
+    }
+
+    public void setUserright(String userright) {
+        this.userright = userright;
     }
 }

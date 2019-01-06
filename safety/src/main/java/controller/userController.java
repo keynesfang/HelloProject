@@ -36,10 +36,12 @@ public class UserController {
 		JSONObject formDataObj = JSONObject.fromObject(formDataStr);
 		JSONObject rltDataObj = new JSONObject();
 		String username = formDataObj.getString("username");
-		user.setName(username);
-		user.setPassword(formDataObj.getString("password"));
-		if(userService.login(user) != null) {
-			session.setAttribute("username", username);
+		user.setUsername(username);
+		user.setUserpass(formDataObj.getString("password"));
+		User dbUser = userService.login(user);
+		if(dbUser != null) {
+			session.setAttribute("username", dbUser.getUsername());
+			session.setAttribute("userright", dbUser.getUserright());
 			rltDataObj.accumulate("result", "success");
 			rltDataObj.accumulate("url", "/safety/app");
 		} else {

@@ -17,23 +17,37 @@
             name: 'index',
             title: '主页',
             icon: 'el-icon-star-on',
-            content: 'http://www.baidu.com',
+            content: '/safety/index.html',
             closable: false
         }
     ]
+    
+    function setSideMenuFromMenulist(menuList) {
+    	 $.each(nav_menu.main_menu, function(name, item) {
+      	   for(let i=0; i< menuList.length; i++) {
+      		   if(name == menuList[i].menutype) {
+      			   menuList[i].menuid = "" + menuList[i].menuid;
+      			   item.subitems.push(menuList[i]);
+      		   }
+      	   }
+      	   nav_menu.component_data.push(item);
+         });
+    }
+    
     var app = null;
+    var menuList = null;
     var default_selected_tab_name = "index";
     $(function() {
         $.ajax({
             type: "post",
             url: "/safety/app",
             async: true,
-            success: function(result) {
-               var rtlObj = eval('(' + result + ')');
+            success: function(rtlObj) {
                if(typeof(rtlObj.username) == "undefined") {
                    document.location.href = rtlObj.url;
                } else {
                    app.username = rtlObj.username;
+                   setSideMenuFromMenulist(rtlObj.menulist);
                    app.loading = false;
                    $(window).resize(function() {
                        app.aside_height = document.documentElement.clientHeight;
@@ -67,7 +81,7 @@
             </div>
         </el-header>
         <el-container >
-            <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px'}">
+            <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px;', 'padding-top': '3px'}">
                 <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
             </el-aside>
             <el-main>
@@ -79,7 +93,7 @@
                         :closable="tab.closable"
                         :name="tab.name">
                         <span slot="label"><i :class="tab.icon"></i> {{tab.title}}</span>
-                        <!-- <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe> -->
+                        <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe>
                     </el-tab-pane>
                 </el-tabs>
             </el-main>

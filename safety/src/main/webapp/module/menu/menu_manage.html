@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>security</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/safety/libs/element_ui/index.ui.min.css">
+    <script src="/safety/libs/vue.js"></script>
+    <script src="/safety/libs/element_ui/index.ui.min.js"></script>
+    <script src="/safety/libs/jquery.min.js"></script>
+    <style>
+	  .el-table .warning-row {
+	    background: oldlace;
+	  }
+	</style>
+    <script type="text/javascript">
+    function getSideMenuFromMenulist(menuList) {
+	    var menus = [];
+	   	 $.each(parent.nav_menu.main_menu, function(name, item) {
+	     	   for(let i=0; i< menuList.length; i++) {
+	     		   if(name == menuList[i].menutype) {
+	     			   menuList[i].menuid = "" + menuList[i].menuid;
+	     			   item.subitems.push(menuList[i]);
+	     		   }
+	     	   }
+	     	  menus.push(item);
+        });
+	   	 return menus;
+   }
+    $(function() {
+        $.ajax({
+            type: "get",
+            url: "/safety/menu/getallmenu",
+            async: true,
+            success: function(rtlObj) {
+            	var all_menu = getSideMenuFromMenulist(rtlObj.menulist);
+                $.each(all_menu, function(idx, item) {
+                	var menu_item = {status: '-', name: item.name, subname: ''};
+                	menu.tableData.push(menu_item);
+                	$.each(item.subitems, function(subidx, subitem) {
+                		if('菜单管理' === subitem.menuname) {
+                			return;
+                		}
+                		var sub_status = subitem.menustatus === "enable" ? true : false;
+                		var sub_item = {menu_id: subitem.menuid, status: sub_status, name: '', subname: subitem.menuname};
+                		menu.tableData.push(sub_item);
+                	});
+                });
+                menu.loading = false;
+            },
+            error: function(data) {
+                console.log("error");
+                $("body").html(data.responseText);
+            }
+        });
+    });
+</script>
+</head>
+<body>
+<div id="menu" 
+	v-loading.fullscreen.lock="loading" 
+	element-loading-text="数据加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 1)">
+    <el-table
+    :data="tableData"
+    style="width: 100%"
+    :row-class-name="tableRowClassName">
+    <el-table-column
+      label="顶级菜单"
+      prop="name">
+    </el-table-column>
+    <el-table-column
+      label="二级菜单"
+      prop="subname">
+    </el-table-column>
+    <el-table-column
+      label="菜单状态"
+      align="right">
+	      <el-switch v-if="scope.row.status!=='-'"
+	      	 slot-scope="scope"
+			 v-model="scope.row.status"
+			 active-text="启用"
+			 inactive-text="禁用"
+			 @change="handleChange(scope.$index, scope.row)">
+		  </el-switch>
+    </el-table-column>
+  </el-table>
+</div>
+<script>
+	var menu = new Vue({
+        el: "#menu",
+        data: {
+        	loading: true,
+        	tableData: []
+        },
+        methods: {
+       	 tableRowClassName({row, rowIndex}) {
+   	        if (row.status === '-') {
+   	          return 'warning-row';
+   	        }
+   	        return '';
+   	      },
+          handleChange(index, row) {
+            console.log(index, row);
+            $.ajax({
+                type: "post",
+                url: "/safety/menu/setstatus",
+                async: true,
+                success: function(result) {
+                   var rtlObj = result;
+                   if(typeof(rtlObj.username) == "undefined") {
+                       document.location.href = rtlObj.url;
+                   } else {
+                       app.username = rtlObj.username;
+                       menuList = rtlObj.menulist;
+                       $.each(nav_menu.main_menu, function(name, item) {
+                    	   for(let i=0; i< menuList.length; i++) {
+                    		   if(name == menuList[i].menutype) {
+                    			   menuList[i].menuid = "" + menuList[i].menuid;
+                    			   item.subitems.push(menuList[i]);
+                    		   }
+                    	   }
+                    	   nav_menu.component_data.push(item);
+                       });
+                       app.loading = false;
+                       $(window).resize(function() {
+                           app.aside_height = document.documentElement.clientHeight;
+                       });
+                   }
+                },
+                error: function(data) {
+                    console.log("error");
+                    $("body").html(data.responseText);
+                }
+            });
+          }
+        }
+    });
+</script>
+</body>
+</html>

@@ -112,7 +112,7 @@
 		                    url : "/safety/user/login",
 		                    data : JSON.stringify(form_data),
 		                    contentType:'application/json;charset=utf-8',
-		                    async:false,
+		                    async: false,
 		                    success : function(result) {
 		                       var rtlObj = eval('(' + result + ')');
 		                       if(rtlObj.result == "success") {

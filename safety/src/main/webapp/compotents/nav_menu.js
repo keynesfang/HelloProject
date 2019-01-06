@@ -18,33 +18,44 @@ var nav_menu = {
                                 <i :class="menu_item.icon"></i>\
                                 <span>{{menu_item.name}}</span>\
                             </template>\
-                            <el-menu-item v-for="subitem in menu_item.subitems" :index="subitem.id" :key="subitem.id" @click="$emit(\'menu-click\', subitem)">\
-                                <i class="el-icon-caret-right"></i> {{subitem.name}}\
+                            <el-menu-item v-for="subitem in menu_item.subitems" :index="subitem.menuid" :key="subitem.menuid" @click="$emit(\'menu-click\', subitem)">\
+                                <i class="el-icon-caret-right"></i> {{subitem.menuname}}\
                             </el-menu-item>\
                         </el-submenu>\
                     </el-menu>\
                 '
     },
     component_data: [
-        {
-            id: "meanu-a",
-            name: '操作菜单a',
-            icon: 'el-icon-location',
-            subitems: [
-                {id: "meanu-a-1", name: "子菜单1", url: ""},
-                {id: "meanu-a-2", name: "子菜单2", url: ""}
-            ]
-        },
-        {
-            id: "meanu-b",
-            name: '操作菜单b',
-            icon: 'el-icon-setting',
-            subitems: [
-                {id: "meanu-b-1", name: "子菜单3", url: ""},
-                {id: "meanu-b-2", name: "子菜单4", url: ""}
-            ]
-        }
+//        {
+//            id: "meanu-a",
+//            name: '操作菜单a',
+//            icon: 'el-icon-location',
+//            subitems: [
+//                {menuid: "meanu-a-1", menuname: "子菜单1", menupath: ""},
+//                {menuid: "meanu-a-2", menuname: "子菜单2", menupath: ""}
+//            ]
+//        }
     ],
+    main_menu: {
+    	map: {
+    		id: "map",
+    		name: '地图导航',
+            icon: 'el-icon-location',
+            subitems: []
+    	},
+    	basic: {
+    		id: "basic",
+    		name: '基础信息',
+            icon: 'el-icon-location',
+            subitems: []
+    	},
+    	system: {
+    		id: "system",
+    		name: '系统管理',
+            icon: 'el-icon-setting',
+            subitems: []
+    	}
+    },
     data_transform: function(db_format)  {
         var app_format = [];
         for(let i=0; i<db_format.length; i++) {
@@ -55,10 +66,3 @@ var nav_menu = {
         }
     }
 };
-
-var data_from_db = [
-    {id: "meanu-a-1", name: "子菜单1", url: "", parent_id: "meanu-a", parent_name: "操作菜单a"},
-    {id: "meanu-a-2", name: "子菜单2", url: "", parent_id: "meanu-a", parent_name: "操作菜单a"},
-    {id: "meanu-b-1", name: "子菜单3", url: "", parent_id: "meanu-b", parent_name: "操作菜单b"},
-    {id: "meanu-b-2", name: "子菜单4", url: "", parent_id: "meanu-b", parent_name: "操作菜单b"}
-];

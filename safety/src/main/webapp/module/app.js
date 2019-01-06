@@ -23,14 +23,14 @@ function app_init() {
                 this.menu_display = !this.menu_display;
             },
             addTab: function(menuInfo) {
-                if(this.isTabOpened(menuInfo.id)) {
-                    this.selected_tab_name = menuInfo.id;
+                if(this.isTabOpened(menuInfo.menuid)) {
+                    this.selected_tab_name = menuInfo.menuid;
                     return;
                 }
                 var newTab = {
-                    name: menuInfo.id,
-                    title: menuInfo.name,
-                    content: menuInfo.url,
+                    name: menuInfo.menuid,
+                    title: menuInfo.menuname,
+                    content: menuInfo.menupath,
                     icon: 'el-icon-tickets',
                     closable: true
                 }
