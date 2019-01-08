@@ -14,26 +14,15 @@
 	  }
 	</style>
     <script type="text/javascript">
-    function getSideMenuFromMenulist(menuList) {
-	    var menus = [];
-	   	 $.each(parent.nav_menu.main_menu, function(name, item) {
-	     	   for(let i=0; i< menuList.length; i++) {
-	     		   if(name == menuList[i].menutype) {
-	     			   menuList[i].menuid = "" + menuList[i].menuid;
-	     			   item.subitems.push(menuList[i]);
-	     		   }
-	     	   }
-	     	  menus.push(item);
-        });
-	   	 return menus;
-   }
+ 
     $(function() {
         $.ajax({
             type: "get",
             url: "/safety/menu/getallmenu",
             async: true,
             success: function(rtlObj) {
-            	var all_menu = getSideMenuFromMenulist(rtlObj.menulist);
+            	var all_menu = parent.setMenuData(rtlObj.menulist);
+            	console.log(all_menu);
                 $.each(all_menu, function(idx, item) {
                 	var menu_item = {status: '-', name: item.name, subname: ''};
                 	menu.tableData.push(menu_item);

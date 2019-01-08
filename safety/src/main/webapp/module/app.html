@@ -20,18 +20,31 @@
             content: '/safety/index.html',
             closable: false
         }
-    ]
+    ];
     
-    function setSideMenuFromMenulist(menuList) {
-    	 $.each(nav_menu.main_menu, function(name, item) {
-      	   for(let i=0; i< menuList.length; i++) {
-      		   if(name == menuList[i].menutype) {
-      			   menuList[i].menuid = "" + menuList[i].menuid;
-      			   item.subitems.push(menuList[i]);
-      		   }
-      	   }
-      	   nav_menu.component_data.push(item);
-         });
+    function setMenuData(menuList) {
+    	var menu = {};
+    	// set main menu
+    	$.each(menuList, function(name, item) {
+    		if(item.menupath === "-") {
+    			var icon = item.menutype=="system" ? "el-icon-setting" : "el-icon-location"
+   				menu[item.menutype] = {
+   					id: item.menutype,
+   		    		name: item.menuname,
+   		            icon: icon,
+   		            subitems: []
+   				};
+    		}
+    	});
+    	// set sub menu
+    	$.each(menuList, function(name, item) {
+    		if(item.menupath !== "-") {
+    			item.menuid = "" + item.menuid;
+    			menu[item.menutype].subitems.push(item);
+    		}
+    	});
+    	// console.log(menu);
+    	return menu;
     }
     
     var app = null;
@@ -47,7 +60,10 @@
                    document.location.href = rtlObj.url;
                } else {
                    app.username = rtlObj.username;
-                   setSideMenuFromMenulist(rtlObj.menulist);
+                   var menu = setMenuData(rtlObj.menulist);
+                   $.each(menu, function(name, item) {
+                	   nav_menu.component_data.push(item);
+                   });
                    app.loading = false;
                    $(window).resize(function() {
                        app.aside_height = document.documentElement.clientHeight;
