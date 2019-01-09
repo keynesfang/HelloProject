@@ -47,6 +47,15 @@
     	return menu;
     }
     
+    function setNavMenuStruct(menu) {
+    	nav_menu.component_data.splice(0, nav_menu.component_data.length);
+    	$.each(menu, function(name, item) {
+    		if(item.subitems.length > 0) {
+    			nav_menu.component_data.push(item);
+    		}
+        });
+    }
+    
     var app = null;
     var menuList = null;
     var default_selected_tab_name = "index";
@@ -61,9 +70,7 @@
                } else {
                    app.username = rtlObj.username;
                    var menu = setMenuData(rtlObj.menulist);
-                   $.each(menu, function(name, item) {
-                	   nav_menu.component_data.push(item);
-                   });
+                   setNavMenuStruct(menu);
                    app.loading = false;
                    $(window).resize(function() {
                        app.aside_height = document.documentElement.clientHeight;

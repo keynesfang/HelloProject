@@ -38,12 +38,12 @@ public class AppController {
 			String username = session.getAttribute("username").toString();
 			rltDataObj.accumulate("username", username);
 			if(username.equals("admin")) {
-				JSONArray menuListObj = JSONArray.fromObject(menuService.getAllMenuList());
+				JSONArray menuListObj = JSONArray.fromObject(menuService.getAllEnableMenuList());
 				rltDataObj.accumulate("menulist", menuListObj.toArray());
 				JSONArray userListObj = JSONArray.fromObject(userService.getAllUserList());
 				rltDataObj.accumulate("userlist", userListObj.toArray());
 			} else {
-				JSONArray menuListObj = JSONArray.fromObject(menuService.getAllMenuListExceptSystem());
+				JSONArray menuListObj = JSONArray.fromObject(menuService.getAllEnableMenuListExceptSystem());
 				rltDataObj.accumulate("menulist", menuListObj.toArray());
 			}
 		}

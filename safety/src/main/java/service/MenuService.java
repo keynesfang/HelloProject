@@ -16,8 +16,12 @@ public class MenuService {
 		return menumapper.getAllMenuList();
 	}
 	
-	public List<Menu> getAllMenuListExceptSystem() {
-		return menumapper.getAllMenuListExceptSystem();
+	public List<Menu> getAllEnableMenuList() {
+		return menumapper.getAllEnableMenuList();
+	}
+	
+	public List<Menu> getAllEnableMenuListExceptSystem() {
+		return menumapper.getAllEnableMenuListExceptSystem();
 	}
 	
 	public int updateByPrimaryKeySelective(Menu record) {

@@ -20,5 +20,7 @@ public interface MenuMapper {
     
     List<Menu> getAllMenuList();
     
-    List<Menu> getAllMenuListExceptSystem();
+    List<Menu> getAllEnableMenuList();
+    
+    List<Menu> getAllEnableMenuListExceptSystem();
 }

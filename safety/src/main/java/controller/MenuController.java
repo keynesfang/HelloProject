@@ -13,10 +13,13 @@ import domain.Menu;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import service.MenuService;
+import service.UserService;
 
 @Controller
 @RequestMapping("/menu")
 public class MenuController {
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private MenuService menuService;
 	
@@ -33,6 +36,7 @@ public class MenuController {
 	@RequestMapping(value = "/setstatus", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String set_menu_status(@RequestBody String formDataStr, Menu menu, HttpSession session) throws Exception {
+		String username = session.getAttribute("username").toString();
 		JSONObject formDataObj = JSONObject.fromObject(formDataStr);
 		JSONObject rltDataObj = new JSONObject();
 		Integer menuid = formDataObj.getInt("menuid");
@@ -40,9 +44,14 @@ public class MenuController {
 		menu.setMenuid(menuid);
 		menu.setMenustatus(menustatus);
 		menuService.updateByPrimaryKeySelective(menu);
-		JSONArray menuListObj = JSONArray.fromObject(menuService.getAllMenuList());
+		JSONArray menuListObj;
+		if(username.equals("admin")) {
+			menuListObj = JSONArray.fromObject(menuService.getAllEnableMenuList());
+		} else {
+			menuListObj = JSONArray.fromObject(menuService.getAllEnableMenuListExceptSystem());
+		}
 		rltDataObj.accumulate("menulist", menuListObj.toArray());
-		
+		System.out.println(rltDataObj.toString());
 		return rltDataObj.toString();
 	}
 }

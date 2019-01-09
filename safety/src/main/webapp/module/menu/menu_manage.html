@@ -92,31 +92,20 @@
    	      },
           handleChange(index, row) {
             console.log(index, row);
+            var menustatus = row.status ? "enable" : "disable";
+            var form_data = {
+            	menuid : row.menu_id,
+            	menustatus : menustatus
+            };
             $.ajax({
                 type: "post",
                 url: "/safety/menu/setstatus",
+                data : JSON.stringify(form_data),
+                contentType:'application/json;charset=utf-8',
                 async: true,
-                success: function(result) {
-                   var rtlObj = result;
-                   if(typeof(rtlObj.username) == "undefined") {
-                       document.location.href = rtlObj.url;
-                   } else {
-                       app.username = rtlObj.username;
-                       menuList = rtlObj.menulist;
-                       $.each(nav_menu.main_menu, function(name, item) {
-                    	   for(let i=0; i< menuList.length; i++) {
-                    		   if(name == menuList[i].menutype) {
-                    			   menuList[i].menuid = "" + menuList[i].menuid;
-                    			   item.subitems.push(menuList[i]);
-                    		   }
-                    	   }
-                    	   nav_menu.component_data.push(item);
-                       });
-                       app.loading = false;
-                       $(window).resize(function() {
-                           app.aside_height = document.documentElement.clientHeight;
-                       });
-                   }
+                success: function(rtlObj) {
+                	var menu = parent.setMenuData(rtlObj.menulist);
+                	parent.setNavMenuStruct(menu);
                 },
                 error: function(data) {
                     console.log("error");
