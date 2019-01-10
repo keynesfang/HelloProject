@@ -19,4 +19,8 @@ public class UserService {
 	public List<User> getAllUserList() {
 		return usermapper.getAllUserList();
 	}
+	
+	public int update(User u){
+		return usermapper.updateByPrimaryKeySelective(u);
+	}
 }

@@ -50,4 +50,25 @@ public class UserController {
 		}
 		return rltDataObj.toString();
 	}
+	
+	@RequestMapping(value = "/modifyPassWord", method = RequestMethod.POST)
+	@ResponseBody
+	public String ModifyPassWord(@RequestBody String formDataStr, User user) throws Exception {
+		JSONObject formDataObj = JSONObject.fromObject(formDataStr);
+		JSONObject rltDataObj = new JSONObject();
+		
+		user.setUserid(Integer.parseInt(formDataObj.getString("id")));
+		user.setUsername(formDataObj.getString("name"));
+		user.setUserpass(formDataObj.getString("pass"));
+		
+		int dbUser = userService.update(user);
+		if(dbUser != 0) {
+			rltDataObj.accumulate("result", "success");
+			rltDataObj.accumulate("url", "/safety/user/login");
+		} else {
+			rltDataObj.accumulate("result", "fail");
+			System.out.println("modifyPassWord error!");
+		}
+		return rltDataObj.toString();
+	}
 }

@@ -12,7 +12,14 @@ function app_init() {
             aside_width: "200px",
             menu_display: false,
             login_status: true,
-            username: ""
+            username: "",
+            modifyPass: false,
+            form: {
+            	id:'',
+                name: '',
+                pass: ''
+              },
+            formLabelWidth: "120px"
         },
         methods: {
         	logout: function () {
@@ -51,7 +58,28 @@ function app_init() {
                     }
                 }
                 return false;
-            }
+            },
+            modifyPassWord: function () {
+            	var user_data = this.form;
+            	$.ajax({
+                    type : "post",
+                    url : "/safety/user/modifyPassWord",
+                    data : JSON.stringify(user_data),
+                    contentType:'application/json;charset=utf-8',
+                    async: false,
+                    success : function(result) {
+                       var rtlObj = eval('(' + result + ')');
+                       if(rtlObj.result == "success") {
+                    	   document.location.href = rtlObj.url;
+                    	   this.modifyPass = false;
+                       }
+                    },
+                    error : function(data) {
+                    	console.log("error");
+                    	$("body").html(data.responseText);
+                    }
+            	})
+            },
         }
     });
     return app;

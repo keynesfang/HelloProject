@@ -31,7 +31,7 @@ CREATE TABLE `menu` (
 
 /*Data for the table `menu` */
 
-insert  into `menu`(`menuid`,`menuname`,`menupath`,`menustatus`,`menutype`) values (1,'权限管理','/right','enable','system'),(2,'用户管理','/user','enable','system'),(3,'安监地图导航','/map','enable','map'),(4,'录入管理','/basic','enable','basic'),(5,'审核管理','/basic','enable','basic'),(6,'菜单管理','/safety/module/menu/menu_manage.html','enable','system'),(7,'地图导航','-','enable','map'),(8,'基础信息','-','enable','basic'),(9,'系统管理','-','enable','system');
+insert  into `menu`(`menuid`,`menuname`,`menupath`,`menustatus`,`menutype`) values (1,'权限管理','/right','enable','system'),(2,'用户管理','/user','enable','system'),(3,'安监地图导航','/safety/module/map/map.html','enable','map'),(4,'录入管理','/basic','enable','basic'),(5,'审核管理','/basic','enable','basic'),(6,'菜单管理','/safety/module/menu/menu_manage.html','enable','system'),(7,'地图导航','-','enable','map'),(8,'基础信息','-','enable','basic'),(9,'系统管理','-','enable','system');
 
 /*Table structure for table `user` */
 

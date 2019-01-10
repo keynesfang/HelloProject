@@ -69,6 +69,13 @@
                    document.location.href = rtlObj.url;
                } else {
                    app.username = rtlObj.username;
+                   $.each(rtlObj.userlist, function(index, item){
+                	   if(rtlObj.username == item.username){
+                		   app.form.id = item.userid;
+                           app.form.name = item.username;
+                           app.form.pass = item.userpass;
+                	   }
+                   });
                    var menu = setMenuData(rtlObj.menulist);
                    setNavMenuStruct(menu);
                    app.loading = false;
@@ -101,8 +108,23 @@
                 	v-model="login_status"
 	                active-text="注销">
                 </el-switch>
+                <i class="el-icon-setting" @click="modifyPass = true"></i>
             </div>
         </el-header>
+        <el-dialog title="修改密码" :visible.sync="modifyPass">
+		  <el-form :model="form">
+		    <el-form-item label="用户名" :label-width="formLabelWidth">
+		      <el-input v-model="form.name" autocomplete="off" clearable></el-input>
+		    </el-form-item>
+		    <el-form-item label="密码" :label-width="formLabelWidth">
+		      <el-input v-model="form.pass" autocomplete="off" clearable type='password'></el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="modifyPass = false">取 消</el-button>
+		    <el-button type="primary" @click="modifyPassWord">确 定</el-button>
+		  </div>
+		</el-dialog>
         <el-container >
             <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px;', 'padding-top': '3px'}">
                 <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
