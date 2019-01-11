@@ -73,7 +73,7 @@
                 	   if(rtlObj.username == item.username){
                 		   app.form.id = item.userid;
                            app.form.name = item.username;
-                           app.form.pass = item.userpass;
+                           app.lastPass = item.userpass;
                 	   }
                    });
                    var menu = setMenuData(rtlObj.menulist);
@@ -89,6 +89,10 @@
                 $("body").html(data.responseText);
             }
         });
+        //delete tab pane padding
+        $(".el-tabs__content").css("padding",0);
+        //scrollbar x bar hidden
+        $(".el-scrollbar__wrap").css("overflow-x","hidden");
     });
 </script>
 </head>
@@ -111,12 +115,15 @@
                 <i class="el-icon-setting" @click="modifyPass = true"></i>
             </div>
         </el-header>
-        <el-dialog title="修改密码" :visible.sync="modifyPass">
+        <el-dialog title="修改密码" :visible.sync="modifyPass" width = "30%">
 		  <el-form :model="form">
-		    <el-form-item label="用户名" :label-width="formLabelWidth">
+		    <el-form-item label="用户名">
 		      <el-input v-model="form.name" autocomplete="off" clearable></el-input>
 		    </el-form-item>
-		    <el-form-item label="密码" :label-width="formLabelWidth">
+		    <el-form-item label="当前密码">
+		      <el-input v-model="inputLastPass" autocomplete="off" clearable type='password'></el-input>
+		    </el-form-item>
+		    <el-form-item label="修改密码">
 		      <el-input v-model="form.pass" autocomplete="off" clearable type='password'></el-input>
 		    </el-form-item>
 		  </el-form>
@@ -125,12 +132,14 @@
 		    <el-button type="primary" @click="modifyPassWord">确 定</el-button>
 		  </div>
 		</el-dialog>
-        <el-container >
-            <el-aside :width="aside_width" :style="{height: aside_height-60 + 'px;', 'padding-top': '3px'}">
-                <c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
+        <el-container>
+            <el-aside :width="aside_width" :style="{'height': aside_height-60 + 'px', 'padding-top': '3px','overflow': 'hidden'}">
+            	<el-scrollbar :native="false" :style="{'height':'100%'}">
+                	<c-nav-menu @menu-click="addTab" :menu_display="menu_display"></c-nav-menu>
+                </el-scrollbar>
             </el-aside>
             <el-main>
-                <el-tabs v-model="selected_tab_name" type="border-card" @tab-remove="removeTab" :style="{height: aside_height-65 + 'px'}">
+                <el-tabs v-model="selected_tab_name" type="border-card" @tab-remove="removeTab" :style="{'height': aside_height-65 + 'px'}">
                     <el-tab-pane
                         v-for="(tab, index) in tabs_items"
                         :key="tab.name"
@@ -138,7 +147,7 @@
                         :closable="tab.closable"
                         :name="tab.name">
                         <span slot="label"><i :class="tab.icon"></i> {{tab.title}}</span>
-                        <iframe :src="tab.content" style="width:100%;min-height:660px;border:none;"></iframe>
+                        <iframe :src="tab.content" :style="{'width':'100%','height': aside_height-108+'px','border':'none'}"></iframe>
                     </el-tab-pane>
                 </el-tabs>
             </el-main>

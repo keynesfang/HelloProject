@@ -18,8 +18,9 @@ function app_init() {
             	id:'',
                 name: '',
                 pass: ''
-              },
-            formLabelWidth: "120px"
+            },
+            lastPass:'',
+            inputLastPass:''
         },
         methods: {
         	logout: function () {
@@ -61,24 +62,31 @@ function app_init() {
             },
             modifyPassWord: function () {
             	var user_data = this.form;
-            	$.ajax({
-                    type : "post",
-                    url : "/safety/user/modifyPassWord",
-                    data : JSON.stringify(user_data),
-                    contentType:'application/json;charset=utf-8',
-                    async: false,
-                    success : function(result) {
-                       var rtlObj = eval('(' + result + ')');
-                       if(rtlObj.result == "success") {
-                    	   document.location.href = rtlObj.url;
-                    	   this.modifyPass = false;
-                       }
-                    },
-                    error : function(data) {
-                    	console.log("error");
-                    	$("body").html(data.responseText);
-                    }
-            	})
+            	if(this.inputLastPass != this.lastPass){
+            		 this.$notify.error({
+                         title: '修改失败',
+                         message: '密码输入错误！'
+                      });
+            	}else{
+	            	$.ajax({
+	                    type : "post",
+	                    url : "/safety/user/modifyPassWord",
+	                    data : JSON.stringify(user_data),
+	                    contentType:'application/json;charset=utf-8',
+	                    async: false,
+	                    success : function(result) {
+	                       var rtlObj = eval('(' + result + ')');
+	                       if(rtlObj.result == "success") {
+	                    	   document.location.href = rtlObj.url;
+	                    	   this.modifyPass = false;
+	                       }
+	                    },
+	                    error : function(data) {
+	                    	console.log("error");
+	                    	$("body").html(data.responseText);
+	                    }
+	            	})
+            	}
             },
         }
     });
