@@ -13,13 +13,10 @@ import domain.Menu;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import service.MenuService;
-import service.UserService;
 
 @Controller
 @RequestMapping("/menu")
 public class MenuController {
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private MenuService menuService;
 	

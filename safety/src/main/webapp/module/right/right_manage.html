@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>security</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/safety/libs/element_ui/index.ui.min.css">
+    <script src="/safety/libs/vue.js"></script>
+    <script src="/safety/libs/element_ui/index.ui.min.js"></script>
+    <script src="/safety/libs/jquery.min.js"></script>
+    <style>
+	    html, body, #right {
+	    	height:100%;
+	    	padding: 0;
+	    	margin: 0;
+	    	box-sizing: border-box;
+	    }  
+	    #right {
+	    	padding: 15px;
+	    }
+	    .el-table--striped .el-table__body tr.el-table__row--striped.current-row td, 
+		.el-table__body tr.current-row>td {
+			background-color: #409EFF;
+			color: #fff;
+		}
+	</style>
+    <script type="text/javascript">
+    var curSelUserId = "";
+    var curUserRight = "";
+    function setUserlist(usrLst) {
+    	var index = 1;
+    	right.userlist = [];
+    	$.each(usrLst, function(idx, itm) {
+    		if(itm.username == "admin") {
+    			return true;
+    		}
+    		itm.idx = index;
+    		index += 1;
+    		right.userlist.push(itm);
+    	});
+    }
+    
+    $(function() {
+    	$.ajax({
+            type : "post",
+            url : "/safety/user/getrightinfo",
+            async: false,
+            success : function(rtlObj) {
+            	setUserlist(rtlObj.userlist);
+            	var menu = parent.setMenuData(rtlObj.menulist);
+            	$.each(menu, function(idx, itm) {
+            		right.menulist.push({
+            	      key: idx,
+            	      label: itm.name,
+            	      disabled: true
+            	    });
+	           		$.each(itm.subitems, function(sidx, sitm) {
+	           			right.menulist.push({
+	                 	      key: sitm.menuid,
+	                 	      label: sitm.menuname,
+	                 	      disabled: false
+	                 	});
+	           		});
+            	});
+            	right.loading = false;
+            },
+            error : function(data) {
+            	console.log("error");
+            	$("body").html(data.responseText);
+            }
+    	});
+    });
+</script>
+</head>
+<body>
+<div id="right" 
+	v-loading.fullscreen.lock="loading" 
+	element-loading-text="数据加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 1)">
+    
+<el-row :gutter="20">
+  <el-col :span="16">
+	  <el-transfer 
+		v-model="forbiddenLst" 
+		:data="menulist" 
+		:titles="titles"
+		filterable
+		:filter-method="filterMethod"
+		filter-placeholder="请输入菜单名称" @change="rightChange">
+			<el-button v-show="changeable" class="transfer-footer" slot="left-footer" size="small" @click="changConfirm">确认变更</el-button>
+			<el-button v-show="changeable" class="transfer-footer" slot="right-footer" size="small" @click="changConfirm">确认变更</el-button>
+		</el-transfer>
+  </el-col>
+  <el-col :span="8">
+	  <el-table
+	    :data="userlist"
+	    border
+	    style="width: 100%; height: 100%;"
+	    :header-cell-style="headerStyle"
+	    @row-click="userRowClick"
+	    highlight-current-row>
+	    <el-table-column
+	      prop="idx"
+	      label="序号"
+	      width="100">
+	    </el-table-column>
+	    <el-table-column
+	      prop="username"
+	      label="姓名">
+	    </el-table-column>
+	  </el-table>
+  </el-col>
+</el-row>
+  
+</div>
+<script>
+	var right = new Vue({
+        el: "#right",
+        data: function() {
+	       	return {
+	       		titles: ['已授权菜单列表', '已禁用菜单列表'],
+	       		menulist: [],
+	       		forbiddenLst: [],
+	            loading: true,
+	            userlist: [],
+	            changeable: false
+	        };
+        },
+        methods: {
+	       	headerStyle: function({ row, rowIndex}) {
+	       		return 'background-color: #545c64; color: #fff;';
+      		},
+      		filterMethod: function(query, item) {
+                return 1;
+            },
+            userRowClick: function(row, event, column) {
+            	curSelUserId = row.userid;
+            	if(row.userright != "") {
+            		var rightArr = row.userright.split(',');
+            		for(let i=0; i<rightArr.length; i++) {
+            			if(rightArr[i] != "") {
+            				right.forbiddenLst.push(rightArr[i]);
+            			}
+            		}
+            	} else {
+        			right.forbiddenLst = [];
+        		}
+            	right.changeable = false;
+            },
+            rightChange: function(value, direction, movedKeys) {
+            	curUserRight = "";
+            	if(value.length == 0) {
+            		curUserRight = "";
+            	} else {
+            		curUserRight = "," + value.join(',') + ",";
+            	}
+            	if(curSelUserId != "") {
+            		right.changeable = true;
+            	}
+            },
+            changConfirm: function() {
+            	if(curSelUserId != "") {
+            		var form_data = {
+            			userid : curSelUserId,
+            			userright : curUserRight
+                    };
+            		var that = this;
+            		$.ajax({
+                        type : "post",
+                        url : "/safety/user/setrightinfo",
+                        data : JSON.stringify(form_data),
+                        contentType:'application/json;charset=utf-8',
+                        success : function(rtlObj) {
+                        	if(rtlObj.result == "success") {
+                        		that.$notify({
+                       	          title: '成功',
+                       	          message: '恭喜,权限已修改成功!',
+                       	          type: 'success'
+                       	        });
+                        	} else {
+                        		that.$notify.error({
+                       	          title: '错误',
+                       	          message: '修改失败,请重试!'
+                       	        });
+                        	}
+                        	curSelUserId = "";
+                            curUserRight = "";
+                            right.forbiddenLst = [];
+                        	setUserlist(rtlObj.userlist);
+                        	right.changeable = false;
+                        },
+                        error : function(data) {
+                        	console.log("error");
+                        	$("body").html(data.responseText);
+                        }
+                	});
+            	} else {
+            		this.$notify.error({
+           	          title: '错误',
+           	          message: '请选择一个用户!'
+           	        });
+            	}
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -93,10 +93,16 @@
   <select id="getAllMenuList" resultMap="BaseResultMap">
     select * from menu
   </select>
+  <select id="getAllMenuListExceptSystem" resultMap="BaseResultMap">
+    select * from menu where menutype != "system"
+  </select>
   <select id="getAllEnableMenuList" resultMap="BaseResultMap">
     select * from menu where menustatus = "enable"
   </select>
   <select id="getAllEnableMenuListExceptSystem" resultMap="BaseResultMap">
     select * from menu where menutype != "system" and menustatus = "enable"
+  </select>
+  <select id="getAllEnableMenuListExceptSystemByUser" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select * from menu where menutype != "system" and menustatus = "enable" and NOT FIND_IN_SET(','+menuid+',', (SELECT userright FROM USER WHERE userid=#{userid,jdbcType=INTEGER}))
   </select>
 </mapper>

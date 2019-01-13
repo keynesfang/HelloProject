@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import domain.Menu;
+import domain.User;
 import mapper.MenuMapper;
 @Service
 public class MenuService {
@@ -14,6 +15,10 @@ public class MenuService {
 	
 	public List<Menu> getAllMenuList() {
 		return menumapper.getAllMenuList();
+	}
+	
+	public List<Menu> getAllMenuListExceptSystem() {
+		return menumapper.getAllMenuListExceptSystem();
 	}
 	
 	public List<Menu> getAllEnableMenuList() {
@@ -26,5 +31,9 @@ public class MenuService {
 	
 	public int updateByPrimaryKeySelective(Menu record) {
 		return menumapper.updateByPrimaryKeySelective(record);
+	}
+	
+	public List<Menu> getAllEnableMenuListExceptSystemByUser(User user) {
+		return menumapper.getAllEnableMenuListExceptSystemByUser(user);
 	}
 }
