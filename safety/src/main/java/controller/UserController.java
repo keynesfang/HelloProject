@@ -62,14 +62,21 @@ public class UserController {
 		JSONObject formDataObj = JSONObject.fromObject(formDataStr);
 		JSONObject rltDataObj = new JSONObject();
 		
-		user.setUserid(Integer.parseInt(formDataObj.getString("id")));
 		user.setUsername(formDataObj.getString("name"));
-		user.setUserpass(formDataObj.getString("pass"));
+		user.setUserpass(formDataObj.getString("lastPass"));
 		
-		int dbUser = userService.update(user);
-		if(dbUser != 0) {
-			rltDataObj.accumulate("result", "success");
-			rltDataObj.accumulate("url", "/safety/user/login");
+		User selectUser = userService.login(user);
+		if(selectUser != null) {
+			user.setUserid(selectUser.getUserid());
+			user.setUserpass(formDataObj.getString("pass"));
+			int updateUser = userService.update(user);
+			if(updateUser != 0) {
+				rltDataObj.accumulate("result", "success");
+				rltDataObj.accumulate("url", "/safety/user/login");
+			} else {
+				rltDataObj.accumulate("result", "fail");
+				System.out.println("modifyPassWord error!");
+			}
 		} else {
 			rltDataObj.accumulate("result", "fail");
 			System.out.println("modifyPassWord error!");

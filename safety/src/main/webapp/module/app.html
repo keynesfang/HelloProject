@@ -69,13 +69,7 @@
                    document.location.href = rtlObj.url;
                } else {
                    app.username = rtlObj.username;
-                   $.each(rtlObj.userlist, function(index, item){
-                	   if(rtlObj.username == item.username){
-                		   app.form.id = item.userid;
-                           app.form.name = item.username;
-                           app.lastPass = item.userpass;
-                	   }
-                   });
+                   app.form.name = rtlObj.username;
                    var menu = setMenuData(rtlObj.menulist);
                    setNavMenuStruct(menu);
                    app.loading = false;
@@ -121,7 +115,7 @@
 		      <el-input v-model="form.name" autocomplete="off" clearable></el-input>
 		    </el-form-item>
 		    <el-form-item label="当前密码">
-		      <el-input v-model="inputLastPass" autocomplete="off" clearable type='password'></el-input>
+		      <el-input v-model="form.lastPass" autocomplete="off" clearable type='password'></el-input>
 		    </el-form-item>
 		    <el-form-item label="修改密码">
 		      <el-input v-model="form.pass" autocomplete="off" clearable type='password'></el-input>

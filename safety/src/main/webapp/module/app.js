@@ -15,12 +15,10 @@ function app_init() {
             username: "",
             modifyPass: false,
             form: {
-            	id:'',
                 name: '',
-                pass: ''
-            },
-            lastPass:'',
-            inputLastPass:''
+                pass: '',
+                lastPass:'',
+            }
         },
         methods: {
         	logout: function () {
@@ -62,12 +60,6 @@ function app_init() {
             },
             modifyPassWord: function () {
             	var user_data = this.form;
-            	if(this.inputLastPass != this.lastPass){
-            		 this.$notify.error({
-                         title: '修改失败',
-                         message: '密码输入错误！'
-                      });
-            	}else{
 	            	$.ajax({
 	                    type : "post",
 	                    url : "/safety/user/modifyPassWord",
@@ -79,6 +71,8 @@ function app_init() {
 	                       if(rtlObj.result == "success") {
 	                    	   document.location.href = rtlObj.url;
 	                    	   this.modifyPass = false;
+	                       }else if(rtlObj.result == "fail"){
+	                    	   app.modifyPassErr();
 	                       }
 	                    },
 	                    error : function(data) {
@@ -86,8 +80,13 @@ function app_init() {
 	                    	$("body").html(data.responseText);
 	                    }
 	            	})
-            	}
             },
+            modifyPassErr: function() {
+                this.$notify.error({
+                  title: '登陆失败',
+                  message: '用户名或密码错误！'
+                });
+            }
         }
     });
     return app;
